@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <input id="name" />
+
+    <script>
+      let input = document.getElementById("name");
+
+      input.addEventListener("keyup", (e) => {
+        let inputValue = input.value;
+        if (inputValue === "") {
+          return;
+        }
+
+        inputValue = formatNumber(inputValue);
+        inputValue = inputValue + " $";
+
+        input.value = inputValue;
+        updateCaretPos(input);
+      });
+
+      function formatNumber(n) {
+        // format number 1000000 to 1,234,567
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      function updateCaretPos(input) {
+        let len = input.value.length - 2;
+
+        // Modern Browsers
+        if (input.setSelectionRange) {
+          input.focus();
+          input.setSelectionRange(len, len);
+        } else if (input.createTextRange) {
+          let t = input.createTextRange();
+          t.collapse(true);
+          t.moveEnd("character", len);
+          t.moveStart("character", len);
+          t.select();
+        }
+      }
+    </script>
+  </body>
+</html>
